@@ -1,16 +1,11 @@
 require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
 const { RtcTokenBuilder, RtcRole } = require("agora-access-token");
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+module.exports = async (req, res) => {
+    if (req.method !== "GET") {
+        return res.status(405).json({ error: "Method not allowed" });
+    }
 
-const PORT = process.env.PORT || 3000;
-
-// Generate Token Route
-app.get("/getToken", (req, res) => {
     const { channelName, uid } = req.query;
     if (!channelName) {
         return res.status(400).json({ error: "Channel name is required" });
@@ -18,7 +13,7 @@ app.get("/getToken", (req, res) => {
 
     const appId = process.env.AGORA_APP_ID;
     const appCertificate = process.env.AGORA_APP_CERTIFICATE;
-    const expirationTimeInSeconds = 3600; // 1 hour
+    const expirationTimeInSeconds = 3600;
     const currentTime = Math.floor(Date.now() / 1000);
     const privilegeExpiredTs = currentTime + expirationTimeInSeconds;
 
@@ -32,8 +27,4 @@ app.get("/getToken", (req, res) => {
     );
 
     res.json({ token });
-});
-
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+};
