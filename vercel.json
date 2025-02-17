@@ -1,7 +1,8 @@
 {
-    "version": 2,
-    "routes": [
-      { "src": "/(.*)", "dest": "/" }
-    ]
-  }
+  "version": 2,
+  "routes": [
+    { "src": "/api/token", "dest": "/api/token.js" }
+  ]
+}
+
   
